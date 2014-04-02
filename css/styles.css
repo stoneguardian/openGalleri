@@ -1,0 +1,539 @@
+/*
+Styles for HTML5 File Drag & Drop demonstration
+Featured on SitePoint.com
+Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
+*/
+/*html {height: 100%;}*/
+
+body
+{
+	font-family: "Segoe UI", Tahoma, Helvetica, freesans, sans-serif;
+	/*font-size: 90%;*/
+	/*margin: -19px 0 0 0;*/
+    /*margin: 0 0 0 0;*/
+	color: #333;
+	background-color: #ddd;
+    height: 100%;
+}
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    margin: 15px 0 5px 0;
+    color: #222;
+}
+
+h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 28px;
+    margin: 15px 0 5px 0;
+    color: #222;
+}
+
+h3 {
+
+}
+
+a:link {
+    text-decoration: none;
+}
+
+/*--------------sidebar----------------*/
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: block;
+    padding: 20px 10px 20px 10px;
+    width: 220px;
+    color: #fff;
+    background: rgb(73, 122, 169);
+    text-align: center;
+}
+
+#beside {
+    margin-left: 250px;
+	vertical-align: top;
+	position: relative;
+}
+
+    /*----------buttons-------------*/
+.side-btn {
+    width: 100%;
+    background: rgba(34,34,34,0.8);
+    display: inline-block;
+    padding: 3px 0 3px 0;
+    font-size: 14px;
+    height: 14px;
+    line-height: 14px;
+    color: #e8e8e8;
+    box-shadow: 0 3px 0 -2px rgba(255,255,255,0),
+                0 7px 0 -5px rgba(255,255,255,0);
+    position: relative;
+    top: 0;
+    margin-bottom: 7px;
+    transition: 0.5s;
+}
+
+.side-btn:hover {
+    color: #fff;
+    background: rgba(34,34,34,1);
+    box-shadow: 0 3px 0 -2px rgba(255,255,255,1),
+                0 7px 0 -5px rgba(255,255,255,0.8);
+}
+
+.side-btn:active {
+    top: 2px;
+    box-shadow: 0 3px 0 -2px rgba(255,255,255,0),
+                0 7px 0 -5px rgba(255,255,255,0);
+}
+
+.side-2 {
+    width: 49%;
+    width: calc(50% - 2px);
+}
+
+.side-2:last-child {
+    margin-left: 2%;
+    margin-left: 4px;
+}
+
+.side-3 {
+    width: 33%;
+}
+
+    /*----------container-----------*/
+.side-cont {
+    margin-top: 25px;
+    border-top: solid 1px #000;
+    border-bottom: solid 1px #000;
+}
+
+.no-top {
+    margin-top: 0px;
+    border-top: none;
+    padding-top: 7px;
+}
+
+.side-cont-title {
+    font-size:12px;
+    color: #111;
+    display: block;
+    text-align: left;
+    margin-top: -14px;
+    margin-bottom: 8px;
+}
+
+    /*----------user----------------*/
+#loginImg {
+    /*background: url('http://gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=80');*/
+    background-size: cover;
+    height: 70px;
+    width: 70px;
+    border: solid 4px #fff;
+    border-radius: 40px 40px 40px 40px;
+    margin: 0px auto 10px auto;
+	position: relative;
+	top: 0;
+	overflow: hidden;
+    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+}
+
+.userIcon {
+	background: url('http://gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=80');
+	background-size: cover;
+	height: 70px;
+	width: 70px;
+	border-radius: 35px 35px 0 0;
+}
+
+/*--------------album box----------------*/
+.album-box {
+    width: 200px;
+    height: 300px;
+    display: inline-block;
+    margin: 0 5px 15px 5px;
+}
+
+.box-pad {
+    padding-top: 230px;
+}
+
+.box-title {
+    display: block;
+    color: #fff;
+    text-align: center;
+    height: 51px;
+    line-height: 70px;
+    background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.8)));
+    background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.8) 100%);
+    background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.8) 100%);
+    background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.8) 100%);
+    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.6) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#cc000000',GradientType=0 );
+
+}
+
+.box-year {
+    display: block;
+    color: #e8e8e8;
+    background: rgba(0,0,0,0.65);
+    text-align: center;
+    font-size: 12px;
+    height: 18px;
+    line-height: 18px;
+    margin-top: 1px;
+}
+
+/*--------------nytt album----------------*/
+
+#side2 {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 250px;
+}
+
+#omAlbum{
+	display: inline-block;
+	width: 240px;
+	padding: 0 10px 0 10px;
+	/*border-right: 1px solid #fff;*/
+	vertical-align: top;
+	height: 100%;
+	background: #fff;
+	margin: 10px 0 0 -10px;
+	text-align: left;
+}
+
+#omAlbum div {
+	padding-bottom: 15px;
+	border-bottom: solid 1px #ccc;
+	margin-bottom: 10px;
+}
+
+#omAlbum div:last-child{
+	margin-bottom: 10px;
+	border: none;
+	margin: 0;
+}
+
+#albumNavn{
+	font-size: 16px;
+	width: 100%;
+	width: calc(100% - 11px);
+	padding: 3px 5px 3px 5px;
+	margin-bottom: 10px;
+}
+
+#albumYear {
+    width: 40px;
+    text-align: center;
+    margin-bottom: 5px;
+	float: right;
+}
+
+#basicInfo label {
+    /*margin-right: 5px;*/
+    display: inline-block;
+	margin-bottom: 13px;
+}
+
+#omAlbum div form label {
+	position: relative;
+	top: 2px;
+}
+
+#nAsave {
+	color: #333;
+	border: solid 1px #999;
+	display: inline-block;
+	padding: 3px 15px 3px 15px;
+	background: #eee;
+	transition: 0.5s;
+}
+
+#aNsave:hover {
+	background: #497AA9;
+}
+
+#nameError,
+#yearError {
+    display: inline-block;
+    color: #c52828;
+    margin-left: 5px;
+}
+
+#omAlbum select {
+	display: block;
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+#nAcover label {
+	display: inline-block;
+	margin-bottom: 3px;
+}
+
+/*--------------last opp----------------*/
+
+#uplWrapper {
+	margin: 70px 10px 10px 510px;
+}
+
+#uplPad {
+	margin-top: -20px
+}
+
+#sti {
+    /*visibility: hidden;*/
+}
+
+#filedrag
+{
+	display: none;
+    font-family: 'Roboto', sans-serif;
+    font-size: 25px;
+	text-align: center;
+    width: 100%;
+	width: calc(100% - 10px);
+    padding-top: 130px;
+    height: 146px;
+    /*line-height: 300px;*/
+    margin: 0 auto 0 auto;
+	color: #555;
+	border: 5px dashed #555;
+    transition: 0.5s;
+}
+
+#filedrag:hover {
+    color: #f00;
+}
+
+#filedrag.hover
+{
+	color: #f00;
+	border-color: #f00;
+}
+
+img
+{
+	max-width: 100%;
+}
+
+.img {
+    display: inline-block;
+    /*padding: 150px 0 0 0;*/
+    color: #fff;
+    width: 180px;
+    height: 180px;
+    /*height: 30px;*/
+    background-color: #415f83;
+    margin: 0 2px 2px 2px;
+    /*text-align: center;*/
+    vertical-align: top;
+    position: relative;
+}
+
+.img span {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    display: block;
+    background: rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+ .imgError {
+    /*line-height: 180px;*/
+    padding: 65px 0 0 0;
+    color: #aa3037;
+    display: inline-block;
+    width: 167px;
+    height: 102px;
+    /*background-color: #ddd;*/
+	border: solid 7px #aa3037;
+    margin: 0 2px 0 2px;
+    text-align: center;
+	line-height: 1.2em;
+}
+
+pre
+{
+	width: 95%;
+	height: 8em;
+	font-family: monospace;
+	font-size: 0.9em;
+	padding: 1px 2px;
+	margin: 0 0 1em auto;
+	border: 1px inset #666;
+	background-color: #eee;
+	overflow: auto;
+}
+
+#messages
+{
+	padding: 0 10px;
+	margin: 1em 0;
+	border: 1px solid #999;
+}
+
+#progress p
+{
+	display: block;
+	width: 240px;
+	padding: 2px 5px;
+	margin: 2px 0;
+	border: 1px inset #446;
+	border-radius: 5px;
+	/*background: #eee url("../filedrag/progress.png") 100% 0 repeat-y;*/
+    /*background: #0c0;*/
+}
+
+#progress p.success
+{
+	background: #0c0 none 0 0 no-repeat;
+}
+
+#progress p.failed
+{
+	background: #c00 none 0 0 no-repeat;
+}
+
+/*--------------album----------------*/
+
+#cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 30px;
+}
+
+#title {
+    padding: 50px 15px 10px 15px;
+    position: fixed;
+    bottom: 30px;
+    width: 100%;
+    width: calc(100% - 30px);
+    background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65)));
+    background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+    background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+    background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+    color: #fff;
+}
+
+#title #name {
+    font-size: 45px;
+}
+
+#title .rot {
+    color: #e8e8e8;
+    margin-left: 10px;
+}
+
+#inAlbum {
+    display: inline-block;
+    /*float: right;*/
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+}
+
+.user {
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+    margin-left: 10px;
+    border: solid 2px #fff;
+    border-radius: 50px 50px 50px 50px;
+    opacity: 0.9;
+    /*position: relative;
+    top: 5px;*/
+}
+
+.user:hover {
+    opacity: 1;
+}
+
+#page {
+    display: block;
+    width: 100%;
+    width: calc(100% - 100px);
+    /*height: 100%;*/
+    padding: 50px 50px 50px 50px;
+    top: 100%;
+    background: #ddd;
+    position: absolute;
+    z-index: 1;
+    /*opacity: 0.7;*/
+    /*box-shadow: 0 0 50px 0 #fff;*/
+    overflow: hidden;
+}
+
+/*--------------page----------------*/
+
+#photos {
+    -webkit-column-count: 3;
+    -webkit-column-gap: 20px;
+    -moz-column-count: 3;
+    -moz-column-gap: 20px;
+    column-count: 3;
+    column-gap: 20px;
+    line-height: 50px;
+}
+
+#photos img {
+    width: 100%;
+    height: auto;
+}
+
+/*--------------toolbar----------------*/
+
+#extras {
+    position: fixed;
+    left: 0px;
+    top: 10px;
+    font-size: 24px;
+    line-height: 24px;
+    height: 24px;
+    padding: 5px 0 8px 15px;
+    background: rgba(73, 122, 169, 0);
+    width: 40px;
+    overflow: hidden;
+    display: block;
+    transition: 0.7s;
+    text-align: center;
+}
+
+.showBar {
+    width: 100% !important;
+    width: calc(100% - 15px) !important;
+    background: rgba(73, 122, 169, 0.8) !important;
+    color: #fff;
+}
+
+#toggle {
+    color: rgb(73, 122, 169);
+    opacity: 0.9;
+    transition: 0.5s;
+    position: absolute;
+    left: 15px;
+}
+
+#toggle:hover {
+    /*text-shadow: 0 1px 0 rgba(255,255,255,0.3);*/
+    opacity: 1;
+}
+
+#extras .on {
+    color: #fff;
+    transition: 0.3s;
+}

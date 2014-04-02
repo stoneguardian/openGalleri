@@ -1,0 +1,172 @@
+body{
+	/*background: url('../bilder/bg.jpg') no-repeat center center;
+	background-size: cover;*/
+	/*background: rgba(73, 122, 169, 1);*/
+	height: 100%;
+	font-family: arial, sans-serif;
+	/*background: rgb(73,122,169);
+	background: -moz-linear-gradient(left,  rgba(73,122,169,1) 13%, rgba(221,221,221,1) 13%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(13%,rgba(73,122,169,1)), color-stop(13%,rgba(221,221,221,1)));
+	background: -webkit-linear-gradient(left,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
+	background: -o-linear-gradient(left,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
+	background: -ms-linear-gradient(left,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
+	background: linear-gradient(to right,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#497aa9', endColorstr='#dddddd',GradientType=1 );*/
+	background: #ddd;
+}
+
+p {
+	margin: 10px 10px 10px 10px;
+}
+
+#wrapper {
+	/*background: rgba(73, 122, 169, 0.9);*/
+	/*background: #fff;*/
+	/*background: rgba(230,230,230,0.8);*/
+	position: absolute;
+	top: 0;
+	width: 700px;
+	left: 50%;
+	/*bottom: 0;*/
+	margin-left: -350px;
+	/*text-align: center;*/
+}
+
+h1 {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	font-size: 45px;
+	margin: 35px 0 10px 0;
+	display: block;
+	text-align: center;
+}
+
+.configBox{
+	display: block;
+	background: rgba(255,255,255,0.3);
+	margin-top: 10px;
+	/*padding: 10px 10px 10px 10px;*/
+	transition: 0.5s;
+}
+
+.configBoxContainer {
+	position: relative;
+	width: 100%;
+}
+
+.collapsed {
+	height: 30px;
+	overflow:hidden;
+	transition: 0.5s;
+}
+
+.title {
+	font-size: 20px;
+	margin-bottom: 10px;
+	color: #070E14;
+	display:block;
+	padding: 5px 10px 5px 10px;
+	background: rgba(255,255,255,0.9);
+	text-decoration: none;
+	transition: 0.5s;
+}
+
+.next:hover{
+	background: rgba(73, 122, 169, 0.8);
+}
+
+.subTitle {
+	font-size: 15px;
+	color: rgb(50,50,50);
+}
+
+.next {
+	display: inline-block;
+	background: #fff;
+	color: #000;
+	text-decoration: none;
+	padding: 5px 30px 5px 30px;
+	margin: 0 10px 10px 10px;
+	transition: 0.5s;
+}
+
+form {
+	padding: 0 10px 0 10px;
+}
+
+td {
+	padding: 10px 3px 10px 3px;
+}
+
+@keyframes pBar{
+	0%{ margin-top: -30px; opacity: 0;}
+	100%{ margin-top: 0px; opacity: 1;}
+}
+
+.progress{
+	position: relative;
+	z-index: 2;
+	text-align: center;
+	color: #444444;
+	font-size: 14px;
+	/*padding: 8px 0 8px 0;*/
+	height: 30px;
+	line-height: 30px;
+	animation: pBar 0.5s;
+	opacity: 1;
+	display: block;
+	transition: 0.5s;
+}
+
+#progress {
+	display: block;
+	height: 30px;
+	/*margin-bottom: 10px;*/
+}
+
+#progressNumber {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 30px;
+	line-height: 30px;
+	width: 100%;
+	/*background: #9aff0f;*/
+	z-index: 3;
+	text-align: center;
+	color: #444444;
+	font-size: 14px;
+}
+
+#progressBar{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 30px;
+	width: 0;
+	background: #9aff0f;
+	z-index: 0;
+	transition: 0.5s;
+}
+
+#progressunder {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 30px;
+	width: 100%;
+	background: rgba(255,255,255,0.5);
+	z-index: -1;
+}
+
+#status {
+	margin-top: 20px;
+}
+
+#info {
+	margin-top: 30px;
+}
+
+.space {
+	padding-top:30px;
+}
