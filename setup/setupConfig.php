@@ -41,8 +41,12 @@
 		//--------------------------------------------//
 
 		//Fjern eksisterende
-		unlink($dbConnectFile);
-		unlink($dbnameFile);
+		if(file_exists($dbConnectFile) == true){
+			unlink($dbConnectFile);
+		}
+		if(file_exists($dbnameFile) == true){
+			unlink($dbnameFile);
+		}
 
 		//Skriv database config-filer
 		//dbConnect.php
@@ -78,7 +82,9 @@
 		//--------------------------------------------//
 
 		//Fjern eksisterende
-		unlink($mailFile);
+		if(file_exists($mailFile) == true){
+			unlink($mailFile);
+		}
 
 		//Skriv mail config-fil
 		//mail.php
