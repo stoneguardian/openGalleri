@@ -1,17 +1,6 @@
 body{
-	/*background: url('../bilder/bg.jpg') no-repeat center center;
-	background-size: cover;*/
-	/*background: rgba(73, 122, 169, 1);*/
 	height: 100%;
 	font-family: arial, sans-serif;
-	/*background: rgb(73,122,169);
-	background: -moz-linear-gradient(left,  rgba(73,122,169,1) 13%, rgba(221,221,221,1) 13%);
-	background: -webkit-gradient(linear, left top, right top, color-stop(13%,rgba(73,122,169,1)), color-stop(13%,rgba(221,221,221,1)));
-	background: -webkit-linear-gradient(left,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
-	background: -o-linear-gradient(left,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
-	background: -ms-linear-gradient(left,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
-	background: linear-gradient(to right,  rgba(73,122,169,1) 13%,rgba(221,221,221,1) 13%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#497aa9', endColorstr='#dddddd',GradientType=1 );*/
 	background: #ddd;
 }
 
@@ -41,12 +30,23 @@ h1 {
 	text-align: center;
 }
 
+#setupForms {
+	position: relative;
+
+}
+
 .configBox{
+	position: absolute;
+	z-index: 4;
+	top: 0;
 	display: block;
-	background: rgba(255,255,255,0.3);
+	/*background: rgba(255,255,255,0.3);*/
+	background: #E7E7E7;
 	margin-top: 10px;
 	/*padding: 10px 10px 10px 10px;*/
+	opacity: 1;
 	transition: 0.5s;
+	pointer-events: auto;
 }
 
 .configBoxContainer {
@@ -55,9 +55,36 @@ h1 {
 }
 
 .collapsed {
-	height: 30px;
+	height: 30px !important;
 	overflow:hidden;
 	transition: 0.5s;
+}
+
+.futureStep {
+	opacity: 0;
+	top: 80px;
+	pointer-events: none;
+}
+
+.pastStep {
+	opacity: 0.1;
+	top: -40px;
+}
+
+#database {
+	height: 310px;
+}
+
+#mail {
+	height: 340px;
+}
+
+#user {
+	height: 290px;
+}
+
+#user {
+
 }
 
 .title {
@@ -78,6 +105,11 @@ h1 {
 .subTitle {
 	font-size: 15px;
 	color: rgb(50,50,50);
+	transition: 0.5s;
+}
+
+.subError {
+	color: rgb(197, 40, 40);
 }
 
 .next {
@@ -105,7 +137,7 @@ td {
 
 .progress{
 	position: relative;
-	z-index: 2;
+	z-index: 5;
 	text-align: center;
 	color: #444444;
 	font-size: 14px;
@@ -121,6 +153,7 @@ td {
 #progress {
 	display: block;
 	height: 30px;
+	z-index: 5;
 	/*margin-bottom: 10px;*/
 }
 
@@ -155,7 +188,8 @@ td {
 	left: 0;
 	height: 30px;
 	width: 100%;
-	background: rgba(255,255,255,0.5);
+	/*background: rgba(255,255,255,0.5);*/
+	background: #EEEEEE;
 	z-index: -1;
 }
 
@@ -170,3 +204,53 @@ td {
 .space {
 	padding-top:30px;
 }
+
+/*- Spinner --------------------------*/
+#loading {
+	width: 100%;
+	width: calc(100% - 40px);
+	position: absolute;
+	bottom: 0;
+	display: block;
+	text-align: center;
+	padding: 6px 0 4px 0;
+}
+
+@keyframes dott{
+	0% {top: 50px; opacity: 0;}
+	35% {top: 0; opacity: 1;}
+	65% {top: 0; opacity: 1;}
+	100% {top: 50px; opacity: 0;}
+}
+
+@-webkit-keyframes dott{
+	0% {top: 50px; opacity: 0;}
+	35% {top: 0; opacity: 1;}
+	65% {top: 0; opacity: 1;}
+	100% {top: 50px; opacity: 0;}
+}
+
+.dott {
+	width: 10px;
+	height: 10px;
+	border: solid 2px #222;
+	background: #fff;
+	display: inline-block;
+	border-radius: 8px 8px 8px 8px;
+	position: relative;
+	top: 30px;
+	margin: 0 2px 0 2px;
+	transition: 0.5s;
+	animation: dott 2.5s ease-in-out;
+	animation-iteration-count: infinite;
+	-webkit-animation: dott 2.5s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+#en {animation-delay: 0; -webkit-animation-delay: 0s;}
+#to {animation-delay: 0.2s; -webkit-animation-delay: 0.2s;}
+#tr {animation-delay: 0.4s; -webkit-animation-delay: 0.4s;}
+#fi {animation-delay: 0.6s; -webkit-animation-delay: 0.6s;}
+#fe {animation-delay: 0.8s; -webkit-animation-delay: 0.8s;}
+
+/*- end ----------------------------*/

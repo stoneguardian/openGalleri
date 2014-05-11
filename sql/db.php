@@ -2,10 +2,10 @@
 	//echo "db.php her! <br>";
 
 	include_once "../config/dbConnect.php";
-	include_once "config/dbConnect.php";
+	//include_once "config/dbConnect.php";
 
 	include_once "../config/dbname.php";
-	include_once "config/dbname.php";
+	//include_once "config/dbname.php";
 
 	//Kobler til databasen
 	global $dbServer, $dbUsername, $dbPassword, $db;

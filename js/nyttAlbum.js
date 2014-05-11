@@ -1,15 +1,12 @@
 /**
  * Created by Hallvard on 29.03.14.
  */
-//init----------------------------------------------//
+//- init -------------------------------------------//
 
 var uid = document.getElementById('uid').value;
 var mail = document.getElementById('mail').value;
 
-//--------------------------------------------------//
-
-
-//settings------------------------------------------//
+//- settings ---------------------------------------//
 
 var ctrlAlbum = "../upload/controllAlbum.php";
 
@@ -109,7 +106,6 @@ function changeAlbum(){
     }
 }//changeAlbum end//
 
-
 function removeAlbum(){
     $.ajax({
         type: 'POST',
@@ -126,9 +122,10 @@ function removeAlbum(){
         }
     });
 }
+
 function selectCover(){
     var e = document.getElementById('coverBilde');
-    var current = e.options[e.selectedIndex].value
+    var current = e.options[e.selectedIndex].value;
     var coverStatus = document.getElementById('currentCover');
 
     $.ajax({
@@ -157,14 +154,12 @@ function addCover(name){
 }
 
 function load(){
-    document.getElementById('submit').innerHTML = '';
+    //document.getElementById('submit').innerHTML = '';
     Init();
-    genAlbum();
+    //genAlbum();
 }
 
 function exit(){
-    //alert(created);
-
     if(checkBasic() == false){
         //alert("Pass failed");
         return false;
@@ -173,9 +168,113 @@ function exit(){
     if(created == false){
         removeAlbum();
     }
-
+    return true;
 }
 
 function removeError(id){
     document.getElementById(id).innerHTML = '';
+}
+
+function naSub(id){
+    $('#'+id).addClass('naStepMin');
+}
+
+function naExpand(id){
+    $('#'+id).removeClass('naStepMin');
+}
+
+var naAboutSwitch = true,
+    naNameSwitch = false,
+    naYearSwitch = false;
+
+function naAbout(){
+    if(naAboutSwitch == true){ //Turn off
+        naAboutSwitch = false;
+        naSub('naAbout');
+        document.getElementById('naAboutTitle').innerHTML = '<i class="fa fa-plus"></i> Om Album';
+    }else if(naAboutSwitch == false){ //Turn on
+        naAboutSwitch = true;
+        naExpand('naAbout');
+        document.getElementById('naAboutTitle').innerHTML = '<i class="fa fa-minus"></i> Om Album';
+    }
+}
+
+function naAboutEnd(){
+    if(naYearSwitch == true && naNameSwitch == true){
+        var name = document.getElementById('albumNavn').value;
+        var year = document.getElementById('albumYear').value;
+
+        document.getElementById('nAlbTitle').innerHTML = name + '(' + year + ')';
+        naAbout();
+    }else if(naNameSwitch == false && naYearSwitch == false){
+        naAboutNameError('on');
+        naAboutYearError('on');
+    }else if(naNameSwitch == false){
+        naAboutNameError('on');
+    }else if(naYearSwitch == false){
+        naAboutYearError('on');
+    }
+
+}
+
+function naCheckLenght(){
+    var string = document.getElementById('albumNavn').value;
+    var length = string.length;
+    document.getElementById('naAlbNameCount').innerHTML = length + '/30 tegn';
+    if(length > 0){
+        naNameSwitch = true;
+        naAboutNameError('remove');
+    }else{
+        naNameSwitch = false;
+        naAboutNameError('on');
+    }
+}
+
+function naCheckYear(){
+    var inYear = document.getElementById('albumYear').value;
+    var length = inYear.length;
+
+    //clear Earlier
+    naAboutYearError('remove');
+
+    if(length == 4){//Run only when all 4 numbers are entered
+        //Konverter år til dato
+        var year = new Date('January 1, ' + inYear).getFullYear();
+
+        //Variabler
+        var thisYear = new Date().getFullYear();
+        var baseYear = new Date('January 1, 1930').getFullYear();
+
+        //Sjekkvariabler
+        var chkYear = false;
+
+        if(year >= baseYear && year <= thisYear){
+            naYearSwitch = true;
+            document.getElementById('naAlbYearStatus').innerHTML = '<i class="fa fa-check"></i>';
+            $('#naAlbYearStatus').addClass('naCorrect');
+        }else{
+            naAboutYearError('on');
+        }
+    }
+}
+
+function naAboutNameError(toggle){
+    if(toggle == 'remove'){
+        //$('#albumNavn').css({'box-shadow': '0 0 0 2px rgba(255,255,255,0.3)'});
+        $('#albumNavn').removeClass('naAlbumNameError');
+    }else if(toggle == 'on'){
+        //$('#albumNavn').css({'box-shadow': '0 0 0 2px #c5282'});
+        $('#albumNavn').addClass('naAlbumNameError');
+    }
+    //alert(toggle);
+}
+
+function naAboutYearError(toggle){
+    if(toggle == 'remove'){
+        $('#naAlbYearStatus').removeClass('naCorrect').removeClass('naError');
+        document.getElementById('naAlbYearStatus').innerHTML = '';
+    }else if(toggle == 'on'){
+        document.getElementById('naAlbYearStatus').innerHTML = 'Vennligs fyll inn et gyldig årstall';
+        $('#naAlbYearStatus').addClass('naError');
+    }
 }

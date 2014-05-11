@@ -17,8 +17,8 @@ body
 }
 
 h1 {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
     font-size: 40px;
     margin: 15px 0 5px 0;
     color: #222;
@@ -56,6 +56,7 @@ a:link {
 
 #beside {
     margin-left: 250px;
+	margin-right: 10px;
 	vertical-align: top;
 	position: relative;
 }
@@ -173,9 +174,14 @@ a:link {
     background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.8) 100%);
     background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.8) 100%);
     background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.8) 100%);
-    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.6) 100%);
+    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.7) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#cc000000',GradientType=0 );
+	transition: 0.5s;
+}
 
+.box-title:hover {
+	/*background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.8) 100%);*/
+	text-shadow: 0 0 2px #fff;
 }
 
 .box-year {
@@ -191,50 +197,122 @@ a:link {
 
 /*--------------nytt album----------------*/
 
-#side2 {
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 250px;
-}
-
-#omAlbum{
+.naBtn {
+	background: #eee;
+	color: #3362bc;
 	display: inline-block;
-	width: 240px;
-	padding: 0 10px 0 10px;
-	/*border-right: 1px solid #fff;*/
-	vertical-align: top;
-	height: 100%;
+	width: 100px;
+	text-align: center;
+	padding: 7px 5px 7px 5px;
+	box-shadow: 0 2px 0 0 #ccc;
+	transition: 0.5s;
+}
+
+.naBtn:hover{
 	background: #fff;
-	margin: 10px 0 0 -10px;
-	text-align: left;
+	color: #3581dd;
 }
 
-#omAlbum div {
-	padding-bottom: 15px;
-	border-bottom: solid 1px #ccc;
-	margin-bottom: 10px;
+.naStep {
+	height: auto;
+	transition: 1s;
+	overflow: hidden;
+	padding: 0 10px 15px 10px;
+	/*margin-bottom: 15px;*/
+	/*background: #efefef;*/
 }
 
-#omAlbum div:last-child{
+.naStepMin {
+	height: 19px !important;
+}
+
+.naStepTitle {
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	display: block;
+	width: 100%;
+	background: #f0f0f0;
+	position: relative;
+	left: -10px;
+	padding: 5px 10px 5px 10px;
 	margin-bottom: 10px;
-	border: none;
-	margin: 0;
+	color: #222;
+	box-shadow: 0 2px 0 0 #ccc;
+	transition: 0.5s;
+}
+
+.naStepTitle:hover{
+	background: #fff;
+}
+
+.naStepTitle i {
+	font-size: 12px;
+	position: relative;
+	bottom: 2px;
+}
+
+#naAbout {
+	height: 140px;
+	transition: 0.5s;
+}
+
+#naAlbNameContainer {
+	display: block;
 }
 
 #albumNavn{
+
+	/*display: block;*/
+
+	/*width: 100%;
+	width: calc(100% - 11px);*/
+}
+
+.naAlbumName {
 	font-size: 16px;
-	width: 100%;
-	width: calc(100% - 11px);
-	padding: 3px 5px 3px 5px;
-	margin-bottom: 10px;
+	width: 280px;
+	padding: 3px 5px 2px 5px;
+	margin-bottom: 5px;
+	display: inline-block;
+	border: none;
+	box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+	transition: 0.5s;
+}
+
+.naAlbumNameError {
+	box-shadow: 0 0 0 2px rgba(197,40,40,0.5);;
+
+}
+
+#naAlbNameCount {
+	display: inline-block;
+}
+
+#naAlbNameStatus {
+
 }
 
 #albumYear {
-    width: 40px;
+    width: 50px;
     text-align: center;
-    margin-bottom: 5px;
-	float: right;
+    margin-bottom: 7px;
+	font-size: 16px;
+	padding: 3px 2px 2px 2px;
+	border: none;
+	box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+	display: inline-block;
+}
+
+#naAlbYearStatus {
+	display: inline-block;
+}
+
+.naError {
+	color: #c52828;
+}
+
+.naCorrect {
+	color: #45be09;
 }
 
 #basicInfo label {
@@ -301,9 +379,10 @@ a:link {
 	text-align: center;
     width: 100%;
 	width: calc(100% - 10px);
-    padding-top: 130px;
-    height: 146px;
+    /*padding-top: 130px;
+    height: 146px;*/
     /*line-height: 300px;*/
+	padding: 50px 0 55px 0;
     margin: 0 auto 0 auto;
 	color: #555;
 	border: 5px dashed #555;
@@ -476,6 +555,14 @@ pre
     /*opacity: 0.7;*/
     /*box-shadow: 0 0 50px 0 #fff;*/
     overflow: hidden;
+}
+
+#albDescription {
+	display: block;
+	background: #fff;
+	padding: 10px 20px 20px 20px;
+	line-height: 20px;
+	margin-bottom: 20px;
 }
 
 /*--------------page----------------*/

@@ -6,6 +6,8 @@
     $album = $prefix . 'album';
     $pictures = $prefix . 'pictures';
     $users = $prefix . 'users';
+	$tblAlbumAccess = $prefix . 'albumAccess';
+	$tblCode = $prefix . 'code';
 
 
     //-------------------------------------------//
@@ -16,6 +18,7 @@
     $old_album = $old_prefix . 'album';
     $old_pictures = $old_prefix . 'pictures';
     $old_users = $old_prefix . 'users';
+	$old_tblAlbumAccess = $old_prefix . 'albumAccess';
+	$old_tblCode = $old_prefix . 'code';
 
     //echo "dbname conf here";
-?>

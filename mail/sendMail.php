@@ -1,9 +1,22 @@
 <?php
-    //krever variablene:
-        //$toMail
-        //$toName
-        //$subject
-        //$message
+    //- Krever variablene ---------------------//
+    // $toMail
+    // $toName
+    // $subject
+    // $message
+
+	//- Return --------------------------------//
+	// 'mailStatusCode'
+	// 'mailStatusMsg'
+
+	//- Error Codes ---------------------------//
+	// 0 Not Run
+	// 200 OK
+	// 500 General Error
+	// 501 Missing Variables
+	// 502 Sending Error
+
+	//-----------------------------------------//
     
     if(isset($toMail) and isset($toName) and isset($subject) and isset($message)){
 
@@ -17,7 +30,7 @@
 
         $mail->IsSMTP();                        // telling the class to use SMTP
         $mail->Host       = "ssl://" . $host;   // SMTP server
-        $mail->SMTPDebug  = 1;                  // enables SMTP debug information (for testing), 1 = errors and messages, 2 = messages only
+        $mail->SMTPDebug  = false;                  // enables SMTP debug information (for testing), 1 = errors and messages, 2 = messages only
         $mail->SMTPAuth   = true;               // enable SMTP authentication
         $mail->SMTPSecure = "ssl";              // sets the prefix to the servier
         $mail->Host       = $host;              // the SMTP server
@@ -31,21 +44,22 @@
         $mail->MsgHTML($message);
 
         if(!$mail->Send()) {
-            if($ajax == TRUE){
-                $json = array('sendt' => 'false');
+            if($ajax == true){
+				$mailStatus = array('mailStatusCode' => 502, 'mailStatusMsg' => 'Klarte ikke sende e-post');
             }else{
                 echo "Mailer Error: " . $mail->ErrorInfo;
             }
         } else {
-            if($ajax == TRUE){
-                $json = array('sendt' => 'true');
+            if($ajax == true){
+				$mailStatus = array('mailStatusCode' => 200, 'mailStatusMsg' => 'E-post sendt');
             }else{
                 echo "Message sent!";
             }
+			//$json = true;
         }
     }else{
-        if($ajax == TRUE){
-            $json = array('sendt' => 'variables');
+        if($ajax == true){
+			$mailStatus = array('mailStatusCode' => 501, 'mailStatusMsg' => 'Ikke nok variabler');
         }else{
             echo "<br>Mail ERROR: Ikke nok variabler!<br>";
             echo "toMail: $toMail <br>";
@@ -54,10 +68,3 @@
             echo "message: $message <br>";
         }
     }
-
-    if($ajax == TRUE){
-        echo json_encode($json);
-        header("Content-Type: application/json", true);
-    }
-
-?>

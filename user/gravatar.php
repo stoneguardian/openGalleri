@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hallvard
- * Date: 09.03.14
- * Time: 14:33
- */
+
     function genGravatarURL($mail, $size = '80', $default = 'mm'){
         $md5 = md5( strtolower( trim( $mail ) ) );
 	    return "http://www.gravatar.com/avatar/$md5?s=$size&d=$default";

@@ -20,32 +20,36 @@
 
 		$return = array('user' => true);
 
-	}elseif(isset($_POST['updateDB'])){
+	}elseif(isset($_POST['updateDB']) or $TestResetDB == true){
 
 		require '../sql/db.php';
 
 		//Spørringer
-		$drop_album = "DROP TABLE IF EXISTS $old_album;";
-		$drop_bilder = "DROP TABLE IF EXISTS $old_pictures;";
-		$drop_brukere = "DROP TABLE IF EXISTS $old_users;";
+		$dropAlbum = "DROP TABLE IF EXISTS $old_album;";
+		$dropPicture = "DROP TABLE IF EXISTS $old_pictures;";
+		$dropUser = "DROP TABLE IF EXISTS $old_users;";
+		$dropAlbumAccess = "DROP TABLE IF EXISTS $old_tblAlbumAccess";
+		$dropCode = "DROP TABLE IF EXISTS $old_tblCode";
 
 		$b_album = "CREATE TABLE $album (
                 id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-                uid int NOT NULL,
+                creatorId int NOT NULL,
                 name varchar(30),
                 year int(4),
+                description varchar(400),
                 cover int(11)
                 );";
 
-		$b_bilder = "CREATE TABLE $pictures (
+		$b_picture = "CREATE TABLE $pictures (
                  id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
                  aid int NOT NULL,
                  imageNum int(11) NOT NULL,
                  name varchar(50),
-                 path varchar(200)
+                 type varchar(14) NOT NULL,
+                 path varchar(200) NOT NULL
                  );";
 
-		$b_brukere = "CREATE TABLE $users (
+		$b_user = "CREATE TABLE $users (
                   id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
                   email varchar(100) NOT NULL,
                   password varchar(60) NOT NULL,
@@ -56,17 +60,36 @@
                   recoverTime datetime DEFAULT NULL
                   );";
 
+		$albumAccess = "CREATE TABLE $tblAlbumAccess (
+						id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+						albumId int NOT NULL,
+						type varchar(8) NOT NULL,
+						otherId int NOT NULL,
+						permission int(3)
+						);";
+
+		$code = "CREATE TABLE $tblCode (
+				 id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+				 code varchar(10) NOT NULL,
+				 expire datetime,
+				 password varchar(60)
+				 );";
+
 		//echo $drop_album;
 
 		//Fjern tidligere
-		add($drop_album);
-		add($drop_bilder);
-		add($drop_brukere);
+		add($dropAlbum);
+		add($dropPicture);
+		add($dropUser);
+		add($dropAlbumAccess);
+		add($dropCode);
 
 		//Legg til tabeller
 		add($b_album);
-		add($b_bilder);
-		add($b_brukere);
+		add($b_picture);
+		add($b_user);
+		add($albumAccess);
+		add($code);
 
 		$return = array('db' => true);
 

@@ -26,7 +26,7 @@
     
     //Om du ikke har tilgang, kast ut
     if($decide == 0){
-        header('Location: test.php?noAccess=true');
+        header('Location: ZZZ_test.php?noAccess=true');
     }
     
     //Hent cover-bildet
@@ -122,23 +122,25 @@
         <div id="page">
             <div id="extras">
                 <input type="hidden" id="showHide" value="0">
-                <a id="toggle" href="#0;" onclick="toggleExtras();">&#9776;</a>
+                <a id="toggle" href="#0" onclick="toggleExtras();">&#9776;</a>
             </div>
             <section id="photos">
-            <?php 
-
-            if($stmt = $tk -> prepare("SELECT p.path FROM ". $pictures ." p LEFT JOIN ". $album ." a ON a.id = p.aid WHERE a.id = ?")){
-                $stmt -> bind_param('i', $albumID);
-                $stmt -> execute();
-                $stmt -> bind_result($imageName);
-                while($stmt -> fetch()){
-					$image = $path . $imageName;
-                    echo "<img src='$image'>";
-                }
-                $stmt -> close();
-            }
-
-            ?>
+				<div id="albDescription">
+					<h2>Om albumet</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ornare tortor ipsum. Nulla ornare nibh id dui cursus, eget pretium arcu vestibulum. Fusce mattis, felis a placerat fermentum, dolor dolor suscipit turpis, sed condimentum nisl dui vitae sapien. In aliquam velit sit amet urna egestas, id lobortis tortor tempor. Phasellus eu arcu sollicitudin, eleifend mauris in, pretium metus. Nullam vel ante ut tellus malesuada ullamcorper. Nulla at varius leo. Morbi pharetra tortor cursus, pellentesque elit in, laoreet arcu. Ut nisi sem, tristique faucibus nisi ut, facilisis semper libero. In sagittis orci eu pulvinar aliquam. Nullam ultrices tortor magna, at varius leo laoreet quis. Pellentesque dignissim, leo in convallis aliquam, odio nunc adipiscing leo, in elementum est nunc quis metus.</p>
+				</div>
+				<?php
+					if($stmt = $tk -> prepare("SELECT p.path FROM ". $pictures ." p LEFT JOIN ". $album ." a ON a.id = p.aid WHERE a.id = ?")){
+						$stmt -> bind_param('i', $albumID);
+						$stmt -> execute();
+						$stmt -> bind_result($imageName);
+						while($stmt -> fetch()){
+							$image = $path . $imageName;
+							echo "<img src='$image'>";
+						}
+						$stmt -> close();
+					}
+				?>
             </section>
         </div>
     </body>

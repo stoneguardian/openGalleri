@@ -1,5 +1,17 @@
 <?php
-        
+	//- Return --------------------------------//
+	// 'glemtStatusCode'
+	// 'glemtStatusMsg'
+
+	//- Error Codes ---------------------------//
+	// 200 OK
+	// 500 General Error
+	// 501 Missing Variables
+	// 502 Email Not Found
+	// 503 Database Error
+
+	//-----------------------------------------//
+
     //funnet: http://stackoverflow.com/a/6101969
     function randomPassword() {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
@@ -27,9 +39,12 @@
         }
 
         if($decide == 1){
-
-            echo $name = $fname . " " . $lname;
+            $name = $fname . " " . $lname;
             $code = randomPassword();
+
+			//if(isset($_POST['ajax']) and $_POST['ajax'] == true){
+				$ajax = true;
+			//}
 
             //må ha med disse variablene
             $toMail = $_POST['glemtMail'];
@@ -44,21 +59,30 @@
             //sender eposten
             include "../mail/sendMail.php";
 
-            echo "<br>Før Database, etter mail";
-
             //Sett kode og tidspunkt i databasen
             if($stmt = $tk -> prepare("UPDATE ". $users ." SET recover = ?, recoverTime = NOW() WHERE id = ? AND email = ?")){
                 $stmt -> bind_param('sis', $code, $uid, $_POST['glemtMail']);
                 $stmt -> execute();
                 $stmt -> close();
-            }
-            echo "<br>Database oppdatert";
-            //header('Location:recover.php');
+
+				$glemtStatus = array('glemtStatusCode' => 200, 'glemtStatusMsg' => 'Database oppdatert');
+            }else{
+				$glemtStatus = array('glemtStatusCode' => 503, 'glemtStatusMsg' => 'Databasefeil');
+			}
         }else{
-            echo "ikke riktig mail";
-            //header('Location:../login.php?mail=false');
+			$glemtStatus = array('glemtStatusCode' => 502, 'glemtStatusMsg' => 'Fant ikke e-post');
+			$mailStatus = array('mailStatusCode' => 0, 'mailStatusMsg' => 'Ikke prossessert');
         }
     }else{
-        echo "Now you don't!";
+		$glemtStatus = array('glemtStatusCode' => 501, 'glemtStatusMsg' => 'Mangler variabler');
+		$mailStatus = array('mailStatusCode' => 0, 'mailStatusMsg' => 'Ikke prossessert');
     }
-?>
+
+	//Lag ferdig array
+	$return = array('glemtStatusCode' => $glemtStatus['glemtStatusCode'],
+					'glemtStatusMsg' => $glemtStatus['glemtStatusMsg'],
+					'mailStatusCode' => $mailStatus['mailStatusCode'],
+					'mailStatusMsg' => $mailStatus['mailStatusMsg']);
+
+	echo json_encode($return);
+	header("Content-Type: application/json", true);

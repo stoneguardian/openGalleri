@@ -17,6 +17,8 @@
 		$album = $prefix . "album";
 		$pictures = $prefix . "pictures";
 		$users = $prefix . "users";
+		$tblAlbumAccess = $prefix . "albumAccess";
+		$tblCode = $prefix . "code";
 
 		//Old prefix
 	   	$old_prefix = "'. $_POST['dbPref'] .'";
@@ -25,9 +27,11 @@
 	    $old_album = $old_prefix . "album";
 	    $old_pictures = $old_prefix . "pictures";
 	    $old_users = $old_prefix . "users";
+	    $old_tblAlbumAccess = $old_prefix . "albumAccess";
+		$old_tblCode = $old_prefix . "code";
 
 		//echo "dbname conf here";
-	?>';
+	';
 		//--------------------------------------------//
 
 		//dbConnect.php content						  //
@@ -37,7 +41,7 @@
 		$db = "'. $_POST['dbName'] .'";                           //Which database
 		$dbUsername = "'. $_POST['dbUser'] .'";                   //Username
 		$dbPassword = "'. $_POST['dbPwd'] .'";                  //Password
-	?>';
+	';
 		//--------------------------------------------//
 
 		//Fjern eksisterende
@@ -78,7 +82,7 @@
 	    //Brukes for øyeblikket kun ved glemt passord, for mer konfigurasjon sjekk filene:
     		//- login/glemtPwd.php
     		//- mail/sendMail.php
-	?>';
+	';
 		//--------------------------------------------//
 
 		//Fjern eksisterende

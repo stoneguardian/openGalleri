@@ -1,6 +1,17 @@
 <?php
     session_start();
 
+	function randomPassword() {
+		$alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+		$i = array(); //remember to declare $pass as an array
+		$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+		for ($i = 0; $i < 8; $i++) {
+			$n = rand(0, $alphaLength);
+			$pass[] = $alphabet[$n];
+		}
+		return implode($pass); //turn the array into a string
+	}
+
     if($_POST['husk'] == TRUE){
         setcookie('husk', $_POST['brukernavn'], 3600, '/');
     }
@@ -24,6 +35,7 @@
         $check = $t_hasher -> CheckPassword($_POST['passord'], $pass);
         if ($check){
             $_SESSION['username'] = $_POST['brukernavn'];
+			$_SESSION['key'] = randomPassword();
             $login = array("login" => "true");
         }else{
             $login = array('login' => 'false');
@@ -41,4 +53,3 @@
         }
         echo "Du kjører 'ut'";
     }
-?>

@@ -88,6 +88,7 @@ Based on (with a few modifications):
             Output('<div class="imgError">' + file.name + '<br>Filen er for stor</div>');
             return false;
         }
+        return false;
     }
 
 	// upload JPEG files

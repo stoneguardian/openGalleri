@@ -1,83 +1,53 @@
 <?php
+	//Logincheck --------------------------//
     session_start();
     if(!isset($_SESSION['username'])){
         header("Location: ../index.php?n=TRUE");
     }
+	//-------------------------------------//
 
-    $bruker = $_SESSION['username'];
+	//Includes ----------------------------//
+	include '../sql/db.php';
+	include 'userFunctions.php';
+	//include 'albumFunctions.php';
+	include_once "../config/dbname.php";
+	//-------------------------------------//
 
-    //include_once "../config/dbname.php";
-    include '../sql/db.php';
-    include 'gravatar.php';
-	include_once 'userFunctions.php';
+    $mail = $_SESSION['username'];
 
-    //Hent gravatar
-    $url = genGravatarURL($bruker, 70);
+	//Create user and get information
+	$user = new user();
+	$user -> addUserByMail($mail);
 
-    //Hent navn
-	$name = getName($bruker);
-    
-    function scaleText($string){
-        $defSize = 32;
-        $factor = 2;
-        $length = strlen($string);
-        if($length < 17){
-            return $defSize;
-        }else{
-            $divide = round($length / $factor, 0 , PHP_ROUND_HALF_DOWN);
-            return $ans = $defSize - $divide;
-        }
-    }
+	$uid = $user -> getUid();
+	$name = $user -> getName();
 
-    if($stmt = $tk -> prepare("SELECT * FROM ". $album ." a LEFT JOIN ". $users ." u ON u.id = a.uid WHERE u.email = ?")){
-        $stmt -> bind_param("s", $_SESSION['username']);
-        $stmt -> execute();
-        $stmt -> store_result();
-        $decide = $stmt -> num_rows;
-        $stmt -> close();
-    }
+	//Check how many albums the user have
+	//$decide = albumCount($uid);
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="../css/reset.css" type="text/css">
-        <link rel="stylesheet" href="../css/styles.css" type="text/css">
-        <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
-        <title>Hoved</title>
+        <?php include '../head.php';?>
     </head>
     <body>
         <div id="sidebar">
-            <div id="loginImg">
-                <div id="currentIcon" class="userIcon" style="background: url('<?php echo $url; ?>');"></div>
-            </div>
-            Hei, <?php echo $name; ?>
-            <div class="side-cont no-top">
-                <a href="../index.php?exit=true" class="side-btn">Logg ut</a>
-            </div>
-            
-            <div class="side-cont">
-                <span class="side-cont-title">Navigasjon</span>
-                <a href="index.php" class="side-btn">Hjem</a>
-                <a href="nyttAlbum.php" class="side-btn">Nytt album</a>
-            </div>
+			<?php $user -> getSidebar(); ?>
         </div>
 
         <div id="beside">
             <h1>Mine album</h1>
             <?php
-				echo $decide . "<br>";
-
-                if($decide > 0){
-					echo $decide;
-                    if($stmt = $tk -> prepare("SELECT a.name, a.year, p.path FROM ". $album ." a LEFT JOIN ". $users ." u ON u.id = a.uid LEFT JOIN ". $pictures ." p ON a.id = p.aid WHERE u.email = ? AND a.cover = p.imageNum")){
-                        $stmt -> bind_param("s", $bruker);
+				if($decide > 0){
+				    /*if($stmt = $tk -> prepare("SELECT a.name, a.year, p.path FROM ". $album ." a LEFT JOIN ". $users ." u ON u.id = a.uid LEFT JOIN ". $pictures ." p ON a.id = p.aid WHERE u.id = ? AND a.cover = p.imageNum")){
+                        $stmt -> bind_param("s", $uid);
                         $stmt -> execute();
                         $stmt -> bind_result($aName, $aYear, $aPath);
                         while($stmt -> fetch()){
                             $fontSize = scaleText($aName);
-							$absolutePath = "../album/" . $bruker . "/" . $aYear . "-" . $aName . "/" . $aPath;
+							$absolutePath = "../album/" . $user -> getMail() . "/" . $aYear . "-" . $aName . "/" . $aPath;
 
                             echo '
                                   <div class="album-box" style="background:url(' . "'$absolutePath'" . '); background-repeat: no-repeat; background-position: center center; background-size: cover;">
@@ -85,9 +55,19 @@
                                   <a href="album.php?aName='. $aName . '&aYear=' . $aYear . '" class="box-title" style="font-size: ' . $fontSize . 'px;">' . $aName . '</a>
                                   <a class="box-year">' . $aYear . '</a>
                                   </div>';
+							//echo $aName;
+							$album = new album($tk, $uid, $aName, $aYear);
+							echo $album -> conStatus;
+							//$album -> getCard();
+							//echo $album -> getName();
+
+
                         }
                         $stmt -> close();
-                    }
+                    }*/
+					$album = new album(1, 'Italia', 2013);
+					$album -> getName();
+					echo "123";
                 }else{
                     echo "her var det tomt gitt";
                 }
