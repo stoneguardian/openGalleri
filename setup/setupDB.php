@@ -1,7 +1,7 @@
 <?php
 	if(isset($_POST['usrFna']) and isset($_POST['usrLna']) and isset($_POST['usrMai']) and isset($_POST['usrPwd'])){
 
-		require '../class/dbClass.php';
+		require '../sql/db.php';
 
 		//POST-variabler
 		$fName = $_POST['usrFna'];
@@ -11,21 +11,18 @@
 
 
     	//Hash-er passordet
-    	require '../lib/phpass/PasswordHash.php';
+    	require '../login/phpass/PasswordHash.php';
     	$t_hasher = new PasswordHash(8, FALSE);
     	$hash = $t_hasher -> HashPassword($pw);
 
-		$user = "INSERT INTO ".$tblName['user']." VALUES(NULL, :mail, :pwd, :fname, :lname, :type, NULL, NULL)";
-		$parameters = array('mail' => $mail, 'pwd' => $hash, 'fname' => $fName, 'lname' => $lName, 'type' => 1);
-
-		$db = new db();
-		$db -> add($user, $parameters);
+    	$user = "INSERT INTO $users (email, password, fname, lname, type) VALUES('$mail', '$hash', '$fName', '$lName', 1);";
+		add($user);
 
 		$return = array('user' => true);
 
 	}elseif(isset($_POST['updateDB']) or $TestResetDB == true){
 
-		require '../class/dbClass.php';
+		require '../sql/db.php';
 
 		//Spørringer
 		$dropAlbum = "DROP TABLE IF EXISTS $old_album;";
@@ -34,7 +31,7 @@
 		$dropAlbumAccess = "DROP TABLE IF EXISTS $old_tblAlbumAccess";
 		$dropCode = "DROP TABLE IF EXISTS $old_tblCode";
 
-		$b_album = "CREATE TABLE ".$tblName['albm']." (
+		$b_album = "CREATE TABLE $album (
                 id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
                 creatorId int NOT NULL,
                 name varchar(30),
@@ -43,15 +40,16 @@
                 cover int(11)
                 );";
 
-		$b_picture = "CREATE TABLE ".$tblName['pict']." (
+		$b_picture = "CREATE TABLE $pictures (
                  id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
                  aid int NOT NULL,
                  imageNum int(11) NOT NULL,
                  name varchar(50),
+                 type varchar(14) NOT NULL,
                  path varchar(200) NOT NULL
                  );";
 
-		$b_user = "CREATE TABLE ".$tblName['user']." (
+		$b_user = "CREATE TABLE $users (
                   id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
                   email varchar(100) NOT NULL,
                   password varchar(60) NOT NULL,
@@ -62,7 +60,7 @@
                   recoverTime datetime DEFAULT NULL
                   );";
 
-		$albumAccess = "CREATE TABLE ".$tblName['acce']." (
+		$albumAccess = "CREATE TABLE $tblAlbumAccess (
 						id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
 						albumId int NOT NULL,
 						type varchar(8) NOT NULL,
@@ -70,28 +68,28 @@
 						permission int(3)
 						);";
 
-		$code = "CREATE TABLE ".$tblName['code']." (
+		$code = "CREATE TABLE $tblCode (
 				 id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
 				 code varchar(10) NOT NULL,
 				 expire datetime,
 				 password varchar(60)
 				 );";
 
-		$db = new db();
+		//echo $drop_album;
 
 		//Fjern tidligere
-		$db -> add($dropAlbum);
-		$db -> add($dropPicture);
-		$db -> add($dropUser);
-		$db -> add($dropAlbumAccess);
-		$db -> add($dropCode);
+		add($dropAlbum);
+		add($dropPicture);
+		add($dropUser);
+		add($dropAlbumAccess);
+		add($dropCode);
 
 		//Legg til tabeller
-		$db -> add($b_album);
-		$db -> add($b_picture);
-		$db -> add($b_user);
-		$db -> add($albumAccess);
-		$db -> add($code);
+		add($b_album);
+		add($b_picture);
+		add($b_user);
+		add($albumAccess);
+		add($code);
 
 		$return = array('db' => true);
 

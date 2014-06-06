@@ -40,7 +40,7 @@ body {
     position: relative;
     z-index: 4;
     width: 400px;
-    height: 220px;
+    height: 200px;
     margin: -100px auto 0 auto;
     top: 50%;
     overflow: hidden;
@@ -90,7 +90,7 @@ body {
 }
 
 .loginCheck {
-    bottom: -15px;
+    bottom: -30px;
 }
 
 .nyPwdNed {
@@ -99,27 +99,23 @@ body {
 
 /*----end----*/
 
-@-webkit-keyframes error {
-	0%  { left: 0; }
-	25% { left: -10px; }
-	75% { left: 10px; }
-	100%{ left: 0; }
-}
-
-@keyframes error {
-	0%  { left: 0; }
-	25% { left: -10px; }
-	75% { left: 10px; }
-	100%{ left: 0; }
+@keyframes buzz{
+    0% {left: 0px;}
+    5% {left: -10px;}
+    15% {left: 10px;}
+    25% {left: -10px;}
+    35% {left: 10px;}
+    45% {left: -10px;}
+    55% {left: 10px;}
+    65% {left: -10px;}
+    75% {left: 10px;}
+    85% {left: -10px;}
+    95% {left: 10px;}
+    100% {left: 0px;}
 }
 
 .buzz {
-    -webkit-animation-name: error;
-	-webkit-animation-duration: 0.15s;
-	-webkit-animation-iteration-count: 7;
-	animation-name: error;
-	animation-duration: 0.15s;
-	animation-iteration-count: 7;
+    animation: buzz 0.7s;
 }
 
 #submit {
@@ -246,7 +242,6 @@ body {
     /*background: url('http://gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=80');*/
     background-size: cover;
     display: block;
-	margin-bottom: -10px;
 }
 
 #currentIcon {
@@ -269,41 +264,25 @@ body {
     opacity: 0.5;
 }
 
-.textInput {
+#textInput {
     text-align: center;
-	position: relative;
-	top: 0;
-	opacity: 1;
-	transition: 1s;
-}
-
-.textInputDown {
-	top: 30px;
-	opacity: 0.5;
-}
-
-.loginInput {
-	vertical-align: top;
-	width: 170px;
-	display: inline-block;
-	text-align: center;
-	margin: 0 3px 0 3px;
-	color: #fff;
 }
 
 #login .login {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-    width: 100%;
+    width: 165px;
+    margin-left: 2px;
     border: none;
     padding: 5px 3px 5px 3px;
-	margin: 4px 0 4px 0;
+    position: relative;
+    left: -1px;
+    margin-bottom: 6px;
 	box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
 }
 
 #login .error {
-    box-shadow: 0 0 0 2px rgba(197, 40, 40, 0.8);
+    /*border-bottom: solid 3px #db5252;
+    margin-bottom: 3px;*/
+    box-shadow: 0 0 0 2px #db5252;
 }
 
 .box {
@@ -317,9 +296,9 @@ body {
 }
 
 #check input{
-    margin: 0 4px 0 0;
+    margin: 0px 4px 0 0;
     position: relative;
-    top: 5px;
+    top: 2px;
 }
 
 .link {

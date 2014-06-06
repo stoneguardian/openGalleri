@@ -22,15 +22,15 @@
 
         //eksempel funnet: http://stackoverflow.com/a/8629554
         //Last ned PHPMailer her: https://github.com/Synchro/PHPMailer
-        require_once "../config/mailConf.php";
-        require_once('..lib/PHPMailer/PHPMailerAutoload.php');
+        require_once "../config/mail.php";
+        require_once('class.phpmailer.php');
         //include("class.smtp.php"); // optional, gets called from within class.phpmailer.php if not already loaded
 
         $mail = new PHPMailer();
 
         $mail->IsSMTP();                        // telling the class to use SMTP
         $mail->Host       = "ssl://" . $host;   // SMTP server
-        $mail->SMTPDebug  = false;              // enables SMTP debug information (for testing), 1 = errors and messages, 2 = messages only
+        $mail->SMTPDebug  = false;                  // enables SMTP debug information (for testing), 1 = errors and messages, 2 = messages only
         $mail->SMTPAuth   = true;               // enable SMTP authentication
         $mail->SMTPSecure = "ssl";              // sets the prefix to the servier
         $mail->Host       = $host;              // the SMTP server

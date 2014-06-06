@@ -17,19 +17,18 @@
     }
 
     if(isset($_POST['brukernavn']) and isset($_POST['passord'])){
-        require '../lib/phpass/PasswordHash.php'; //http://www.openwall.com/phpass/
-        require '../class/dbClass.php';
+        //require "../config/dbname.php";
+        require 'phpass/PasswordHash.php'; //http://www.openwall.com/phpass/
+        require '../sql/db.php';
 
-		$db = new db();
-
-		//Prepare parameter-array
-		$parameters = array('mail' => $_POST['brukernavn']);
-
-		//Run db-query
-		$return = $db -> ask("SELECT password FROM " . $tblName['user'] . " WHERE email = :mail", $parameters);
-
-		//Password from database
-		$pass = $return[0]['password'];
+        //Henter passordet fra databasen
+        if($stmt = $tk -> prepare("SELECT password FROM " . $users . " WHERE email = ?")){
+            $stmt -> bind_param("s", $_POST['brukernavn']);
+            $stmt -> execute();
+            $stmt -> bind_result($pass);
+            $stmt -> fetch();
+            $stmt -> close();
+        }
 
         //Sjekker om passordet stemmer
         $t_hasher = new PasswordHash(8, FALSE);
@@ -45,4 +44,12 @@
         //Skriv JSON variabler
         echo json_encode($login);
         header("Content-Type: application/json", true);
+    }
+
+    if(isset($_GET['ut'])){
+        if(isset($_SESSION['username'])){
+            unset($_SESSION['username']);
+            echo "session fjernet <br>";
+        }
+        echo "Du kjører 'ut'";
     }

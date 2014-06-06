@@ -413,7 +413,6 @@ label {
 .naStepTitle {
 	font-family: 'Roboto', sans-serif;
 	font-size: 20px;
-	text-decoration: none;
 	display: block;
 	width: 100%;
 	background: #f0f0f0;
@@ -498,11 +497,6 @@ label {
 
 .naCorrect {
 	color: #45be09;
-}
-
-.hStatus {
-	margin-left: 10px;
-	color: #666;
 }
 
 #basicInfo label {

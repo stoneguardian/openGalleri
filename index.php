@@ -10,11 +10,6 @@
     }
 
 	$version = '0.2.0';
-
-	//Checking for code
-	if(isset($_GET['code'])){
-		header('Location:user/album.php?code='.$_GET['code']);
-	}
 ?>
 
 <!DOCTYPE html>
@@ -29,14 +24,14 @@
 		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="js/index.js"></script>
-    </head>s
+    </head>
     <body>
         <div id="backdrop"></div>
         
         <div id="center">
             <div id="bottomBar">
                     <!--<a href="#0" id="btnKode" class="botBox botLeft" onclick="slideRouter('kode');">Jeg har en kode</a>-->
-                    <a href="#0" id="btnLogin" class="botBox botRight botRightHidden" onclick="checkLogin();" tabindex="5">Logg inn</a>
+                    <a href="#0" id="btnLogin" class="botBox botRight botRightHidden" onclick="checkLogin();">Logg inn</a>
                     <a href="#0" id="btnLukk" class="botBox botRight botRightHidden" onclick="slideRouter('login');">Lukk</a>
                     <a href="#0" id="btnTilbake" class="botBox botRight botRightHidden" onclick="slideRouter('login');">Tilbake</a>
                     
@@ -54,22 +49,13 @@
 						<div id="currentIcon" class="userIcon"></div>
                     </div>
             
-                    <div class="textInput">
-						<div class="loginInput">
-							<label for="bnavn">E-post</label>
-							<input type="text" name="brukernavn" id="bnavn" class="login" onfocus="removeRed('#bnavn');" onblur="uImg();" tabindex="1">
-							<label for="husk"><input type="checkbox" name="husk" id="husk" tabindex="3">Husk meg</label>
-						</div>
-						<div class="loginInput">
-							<label for="pwd">Passord</label>
-							<input type="password" name="passord" id="pwd" class="login" onfocus="removeRed('#pwd');" tabindex="2">
-							<a href="#0" class="link" id="glemt" onclick="slideRouter('nyttPwd');" tabindex="4">Glemt passord?</a>
-						</div>
-
+                    <div id="textInput">
+                        <input type="text" name="brukernavn" id="bnavn" class="login" placeholder="E-post..." onfocus="removeRed('#bnavn');" onblur="uImg();">
+                        <input type="password" name="passord" id="pwd" class="login" placeholder="Passord..." onfocus="removeRed('#pwd');">
                     </div><!--textInput end-->
             
-                    <!--<div class="box center"></div>
-                    <div class="box center"></div>-->
+                    <div class="box center"><input type="checkbox" name="husk" id="husk"><label for="husk">Husk meg</label></div>
+                    <div class="box center"><a href="#0" class="link" id="glemt" onclick="slideRouter('nyttPwd');">Glemt passord?</a></div>
                     <div id="sub">
                         <input type="submit" id="submit" class="botBox botRight" value="Logg inn">
                     </div><!--sub end-->

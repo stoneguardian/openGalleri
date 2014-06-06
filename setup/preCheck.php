@@ -28,21 +28,3 @@
 		$saveOS = fopen('../config/siteConf.php', 'w');
 		fwrite($saveOS, $siteconfig);
 	}
-
-	//Check for existing config-files
-	$dbFile = "../config/dbConf.php";
-	$mailFile = "../config/mailConf.php";
-	$siteFile = "../config/siteConf.php";
-
-	if(file_exists($dbFile) == true){
-		include "../config/dbConf.php";
-	}else{
-		$dbServer = 'localhost';
-		$prefix = 'b_';
-	}
-
-	if(file_exists($mailFile) == true){
-		include "../config/mailConf.php";
-	}else{
-		$fromName = 'no-reply bildeGalleri';
-	}

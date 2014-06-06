@@ -1,0 +1,15 @@
+- Changelog ------------------------------
+
+
+Version 0.2.0 ----------------------------
+- Moved PHP-code into classes
+- Albums can now have multiple owners and permissionlevels (read, read + add images, read + add images + change name, year, etc.)
+- Added db support for sharing albums via code
+- Redesign of New Album page
+- Minor improvement of setup page
+- Change password interface improved
+
+
+Version 0.1.1 ----------------------------
+
+Initial release

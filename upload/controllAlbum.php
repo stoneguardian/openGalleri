@@ -1,7 +1,5 @@
 <?php
-	require '../class/albumClass.php';
-	require '../class/dbClass.php';
-	require '../class/userClass.php';
+    include_once "../sql/db.php";
 
 	$switch = $_POST['switch'];
 
@@ -13,56 +11,78 @@
 		rename($oldDir, $newDir);
 	}
 
-	if(isset($_POST['switch'])){
-		$db = new db();
-		$user = new user($db);
-	}
-
 	if($switch == '0' and isset($_POST['uid'])){
-		//Generate array for album class
-		$value = array('cid' => $_POST['uid']);
-		$album = new album($value, $user, $db, 'new');
+			//Genererer ett årstall og et unikt navn
+			$name = $_POST['uid'] . date('dmYHis');
+			$year = date('Y');
 
-		//Create album
-		$albumId = $album -> createAlbum();
+			//Oppretter album
+			if($stmt = $tk -> prepare("INSERT INTO ". $album ." VALUES(NULL, ?, ?, ?, 1)")){
+				$stmt -> bind_param("isi", $_POST['uid'], $name, $year);
+				$stmt -> execute();
+				$stmt -> close();
+			}
 
-		$return = array('albumID' => $albumId);
+			//Henter albumets album-id
+			if($stmt = $tk -> prepare("SELECT id FROM ". $album ." WHERE uid = ? AND name = ? and year = ?")){
+				$stmt -> bind_param("isi", $_POST['uid'], $name, $year);
+				$stmt -> execute();
+				$stmt -> bind_result($albumID);
+				$stmt -> fetch();
+				$stmt -> close();
+				$return = array('albumID' => $albumID, 'alName' => $name, 'alYear' => $year);
+			}else{
+				$return = array('albumID' => false);
+			}
+
+		mkdir("../album/spretten48@gmail.com/$year-$name", '660', TRUE);
 
 	}elseif($switch == '1' and isset($_POST['albumID']) and isset($_POST['albumName']) and isset($_POST['albumYear']) and isset($_POST['count']) and isset($_POST['uid']) and isset($_POST['mail'])){
-		//Generate array for album class
-		$value = array('id' => $_POST['albumID']);
-		$album = new album($value, $user, $db);
+			//Sjekker om det finnes album med samme navn
+			if($stmt = $tk -> prepare("SELECT * FROM ". $album ." WHERE uid = ? AND name = ? and year = ?")){
+				$stmt -> bind_param('isi', $_POST['uid'], $_POST['albumName'], $_POST['albumYear']);
+				$stmt -> execute();
+				$stmt -> store_result();
+				$decide = $stmt -> num_rows;
+				$stmt -> close();
+			}else{
+				$decide = 0;
+			}
 
-		//Get old values
-		$oldName = $album -> getName();
-		$oldYear = $album -> getYear();
+			if($decide > 0){
+				$return = array('updateAlbum' => false, 'errorMsg' => 'Det finnes allerede et slikt album');
+			}else{ //Dersom unik,
+				//Hent gammelt navn og årstall
+				if($stmt = $tk -> prepare("SELECT name, year FROM ". $album ." WHERE id = ?")){
+					$stmt -> bind_param("i", $_POST['albumID']);
+					$stmt -> execute();
+					$stmt -> bind_result($alName, $alYear);
+					$stmt -> fetch();
+					$stmt -> close();
+				}
 
-		//Update and save to DB
-		$album -> updateName($_POST['albumName']);
-		$album -> updateYear($_POST['albumYear']);
+				//Endre navn og årstall
+				if($stmt = $tk -> prepare("UPDATE ". $album ." SET name = ?, year = ? WHERE id = ?")){
+					$stmt -> bind_param("sii", $_POST['albumName'], $_POST['albumYear'], $_POST['albumID']);
+					$stmt -> execute();
+					$stmt -> close();
 
-		//If successful update folder
-		if($album -> saveToDb() == true){
-			$album -> moveFolder($oldName, $oldYear);
-			$return = array('updateAlbum' => true);
-		}else{
-			$return = array('updateAlbum' => false, 'errorMsg' => 'Databasefeil');
-		}
+					renameDir($alName, $alYear, $_POST['albumName'], $_POST['albumYear'], $_POST['mail']);
 
+					$return = array('updateAlbum' => true, 'oldN' => $alName, 'oldY' => $alYear);
+				}else{
+					$return = array('updateAlbum' => false, 'errorMsg' => 'Databasefeil');
+				}
+			}
 	}elseif($switch == '2' and isset($_POST['albumID']) and isset($_POST['albumCover'])){//Oppdater Coverbilde
-		//Generate array for album class
-		$value = array('id' => $_POST['albumID']);
-		$album = new album($value, $user, $db);
-
-		//Set new value
-		$album -> updateCover($_POST['albumCover']);
-
-		if($album -> saveToDb() == true){
-			$return = array('cover' => true);
-		}else{
-			$return = array('cover' => false);
-		}
-
+			if($stmt = $tk -> prepare("UPDATE ". $album . " SET cover = ? WHERE id = ?")){
+				$stmt -> bind_param("ii", $_POST['albumCover'], $_POST['albumID']);
+				$stmt -> execute();
+				$stmt -> close();
+				$return = array('cover' => true);
+			}else{
+				$return = array('cover' => false);
+			}
 	}elseif($switch == '3' and isset($_POST['albumID']) and isset($_POST['albumName']) and isset($_POST['albumYear'])){
 		//Slett bilder (dersom det er noen)
 		/*if($stmt = $tk -> prepare("DELETE FROM ". $pictures ." WHERE aid = ?")){
@@ -82,10 +102,8 @@
 		}else{
 			$return = array('rm' => false, 'errorMsg' => 'Databasefeil');
 		}
-
 	}else{
 		$return = array('error' => true, 'errorMsg' => 'For få variabler', 'switch' => $switch);
-
 	}
 
     echo json_encode($return);

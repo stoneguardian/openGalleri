@@ -1,53 +1,66 @@
 <?php
 	//Filstier
-	$dbFile = "../config/dbConf.php";
-	$mailFile = "../config/mailConf.php";
+	$dbnameFile = "../config/dbname.php";
+	$dbConnectFile = "../config/dbConnect.php";
+	$mailFile = "../config/mail.php";
 
 	if(isset($_POST['dbPref']) and isset($_POST['dbHost']) and isset($_POST['dbName'])
 	and isset($_POST['dbUser']) and isset($_POST['dbPwd'])){
 
-		//dbConf.php content
-		$dbConfContent = '
+		//dbname.php content						//
+		$dbnameContent = '
 	<?php
-		//- Connection properties --------------//
-		$dbServer = "'. $_POST['dbHost'] .'";     //IP or hostname to MySQL-server
-		$db = "'. $_POST['dbName'] .'";                           //Which database
-		$dbUsername = "'. $_POST['dbUser'] .'";                   //Username
-		$dbPassword = "'. $_POST['dbPwd'] .'";                  //Password
+		//Change what prefix the tablenames should have
+    	$prefix = "'. $_POST['dbPref'] .'";
 
-		//- Table-names ------------------------//
-
-		$prefix = "'. $_POST['dbPref'] .'";
-
-		//Current names
-		// to change names, change the value on the right
-		$tblName = array("albm" => $prefix."album",
-					 	 "pict" => $prefix."pictures",
-					 	 "user" => $prefix."users",
-					 	 "acce" => $prefix."albumAccess",
-					 	 "code" => $prefix."code");
+		//Change tablenames
+		$album = $prefix . "album";
+		$pictures = $prefix . "pictures";
+		$users = $prefix . "users";
+		$tblAlbumAccess = $prefix . "albumAccess";
+		$tblCode = $prefix . "code";
 
 		//Old prefix
 	   	$old_prefix = "'. $_POST['dbPref'] .'";
 
-	    //Old names
+	    //Old tablenames
 	    $old_album = $old_prefix . "album";
 	    $old_pictures = $old_prefix . "pictures";
 	    $old_users = $old_prefix . "users";
 	    $old_tblAlbumAccess = $old_prefix . "albumAccess";
 		$old_tblCode = $old_prefix . "code";
-		';
 
+		//echo "dbname conf here";
+	';
+		//--------------------------------------------//
+
+		//dbConnect.php content						  //
+		$dbConnectContent = '
+	<?php
+		$dbServer = "'. $_POST['dbHost'] .'";     //IP or hostname to MySQL-server
+		$db = "'. $_POST['dbName'] .'";                           //Which database
+		$dbUsername = "'. $_POST['dbUser'] .'";                   //Username
+		$dbPassword = "'. $_POST['dbPwd'] .'";                  //Password
+	';
 		//--------------------------------------------//
 
 		//Fjern eksisterende
-		if(file_exists($dbFile) == true){
-			unlink($dbFile);
+		if(file_exists($dbConnectFile) == true){
+			unlink($dbConnectFile);
+		}
+		if(file_exists($dbnameFile) == true){
+			unlink($dbnameFile);
 		}
 
-		//Skriv database config-fil
-		$file = fopen($dbFile, 'w');
-		fwrite($file, $dbConfContent);
+		//Skriv database config-filer
+		//dbConnect.php
+		$file = fopen($dbConnectFile, 'w');
+		fwrite($file, $dbConnectContent);
+		fclose($file);
+
+		//dbname.php
+		$file = fopen($dbnameFile, 'w');
+		fwrite($file, $dbnameContent);
 		fclose($file);
 
 		$return = array("db" => true);

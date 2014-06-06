@@ -7,53 +7,62 @@
     }
 
     //Databaseoppkobling
-    require '../class/dbClass.php';
-	require '../class/albumClass.php';
-	require '../class/userClass.php';
+    require "../sql/db.php";
 
-	$key = $_SESSION['key'];
+    //GET-variabler
+    $albumName = $_GET['aName'];
+    $albumYear = $_GET['aYear'];
 
-	//Create dependencies
-	$db = new db();
-	$user = new user($db);
+    //Sjekk tilgangen på albumet
+    if($stmt = $tk -> prepare("SELECT a.id FROM ". $users ." u LEFT JOIN ". $album ." a ON u.id = a.uid WHERE u.email = ? AND a.name = ? AND a.year = ?")){
+        $stmt -> bind_param("ssi", $_SESSION['username'], $albumName, $albumYear);
+        $stmt -> execute();
+        $stmt -> store_result();
+        $stmt -> bind_result($albumID);
+        $stmt -> fetch();
+        $decide = $stmt -> num_rows;
+        $stmt -> close();
+    }
+    
+    //Om du ikke har tilgang, kast ut
+    if($decide == 0){
+        header('Location: ZZZ_test.php?noAccess=true');
+    }
+    
+    //Hent cover-bildet
+    if($stmt = $tk -> prepare("SELECT p.path FROM ". $album ." a LEFT JOIN ". $pictures ." p ON a.id = p.aid WHERE a.id = ? AND a.cover = p.imageNum")){
+        $stmt -> bind_param("i", $albumID);
+        $stmt -> execute();
+        $stmt -> bind_result($coverName);
+        $stmt -> fetch();
+        $stmt -> close();
+    }
 
-	if(isset($_GET['id'])){
-		$albumId = $_GET['id'];
+    //Hent deltakere
+    $i = 0;
+    if($stmt = $tk -> prepare("SELECT u.email FROM ". $album ." a LEFT JOIN ". $users ." u ON a.uid = u.id WHERE a.id = ?")){
+        $stmt -> bind_param("i", $albumID);
+        $stmt -> execute();
+        $stmt -> bind_result($tmp_users);
+        while($stmt->fetch()){
+            $inAlbum[$i] = $tmp_users;
+            $i += 1;
+        }
+        $stmt -> close();
+    }
 
-		//Create array
-		$value = array('id' => $albumId);
+	//Stier
+	$path = "../album/" . $_SESSION['username'] . "/" . $albumYear . "-" . $albumName . "/";
+	$cover = $path . $coverName;
 
-		//Create album-class
-		$album = new album($value, $user, $db);
-	}elseif(isset($_GET['code'])){
-		$code = $_GET['code'];
-
-		//Create array
-		$value = array('code' => $_GET['code']);
-
-		//Create album-class
-		$album = new album($value, $user, $db, 'code');
-
-		if($album == false){
-			header('Location:../index.php?code=false');
-		}
-	}
-	//Authenticate
-	/*
-	 * To be added
-	 */
-
-	//Get information
-	$name = $album -> getName();
-	$year = $album -> getYear();
-	$cover = $album -> getCoverPath();
+    include_once 'gravatar.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title><?php echo $name; ?></title>
+        <title><?php echo $albumName; ?></title>
 		<link rel="stylesheet" href="../css/reset.css" type="text/css">
         <link rel="stylesheet" href="../css/styles.css" type="text/css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
@@ -96,11 +105,11 @@
         </script>
     </head>
     <body onload="load();" onresize="repos();">
-        <div id="cover" style="background: url('<?php echo "image.php?path=".$cover."&key=".$key;?>'); background-repeat: no-repeat; background-position: center 0; background-size: cover;"></div>
+        <div id="cover" style="background: url('<?php echo $cover;?>'); background-repeat: no-repeat; background-position: center 0; background-size: cover;"></div>
         <div id="title">
             
-            <span id="name"><?php echo $name; ?></span><span class="rot">(<?php echo $year; ?>)</span>
-            <!--<div id="inAlbum">
+            <span id="name"><?php echo $albumName; ?></span><span class="rot">(<?php echo $albumYear; ?>)</span>
+            <div id="inAlbum">
                 <?php 
                     //foreach($inAlbum as $user){
                     //    echo '<div class="user" style="background: url(' . "'" . genGravatarURL($user, '40') . "'" .');"></div>';
@@ -108,7 +117,7 @@
 
                     echo '<div class="user" style="background: url(' . "'" . genGravatarURL($inAlbum[0], '35') . "'" .');"></div>';
                 ?>
-            </div>-->
+            </div>
         </div>
         <div id="page">
             <div id="extras">
@@ -116,19 +125,20 @@
                 <a id="toggle" href="#0" onclick="toggleExtras();">&#9776;</a>
             </div>
             <section id="photos">
-				<!--<div id="albDescription">
+				<div id="albDescription">
 					<h2>Om albumet</h2>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ornare tortor ipsum. Nulla ornare nibh id dui cursus, eget pretium arcu vestibulum. Fusce mattis, felis a placerat fermentum, dolor dolor suscipit turpis, sed condimentum nisl dui vitae sapien. In aliquam velit sit amet urna egestas, id lobortis tortor tempor. Phasellus eu arcu sollicitudin, eleifend mauris in, pretium metus. Nullam vel ante ut tellus malesuada ullamcorper. Nulla at varius leo. Morbi pharetra tortor cursus, pellentesque elit in, laoreet arcu. Ut nisi sem, tristique faucibus nisi ut, facilisis semper libero. In sagittis orci eu pulvinar aliquam. Nullam ultrices tortor magna, at varius leo laoreet quis. Pellentesque dignissim, leo in convallis aliquam, odio nunc adipiscing leo, in elementum est nunc quis metus.</p>
-				</div>-->
+				</div>
 				<?php
-					$pictures = $album -> getImages();
-
-					if($pictures == false){
-						echo "Albumet har ingen bilder";
-					}else{
-						foreach($pictures as $path){
-							echo '<img src="image.php?path='.$path.'&key='.$key.'">';
+					if($stmt = $tk -> prepare("SELECT p.path FROM ". $pictures ." p LEFT JOIN ". $album ." a ON a.id = p.aid WHERE a.id = ?")){
+						$stmt -> bind_param('i', $albumID);
+						$stmt -> execute();
+						$stmt -> bind_result($imageName);
+						while($stmt -> fetch()){
+							$image = $path . $imageName;
+							echo "<img src='$image'>";
 						}
+						$stmt -> close();
 					}
 				?>
             </section>
