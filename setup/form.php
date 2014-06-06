@@ -13,17 +13,17 @@
 			<table>
 				<tr>
 					<td><label for="dbHost">Host</label></td>
-					<td><input type="text" id="dbHost" name="dbHost" value="localhost"></td>
+					<td><input type="text" id="dbHost" name="dbHost" value="<?php echo $dbServer ?>"></td>
 					<td>Hostname eller IP-adresse til MySQL-serveren som skal brukes</td>
 				</tr>
 				<tr>
 					<td><label for="dbName">Database</label></td>
-					<td><input type="text" id="dbName" name="dbName"></td>
+					<td><input type="text" id="dbName" name="dbName" value="<?php echo $db ?>"></td>
 					<td>Navnet på MySQL-databasen som bildeGalleri skal bruke</td>
 				</tr>
 				<tr>
 					<td><label for="dbUser">Brukernavn</label></td>
-					<td><input type="text" id="dbUser" name="dbUser"></td>
+					<td><input type="text" id="dbUser" name="dbUser" value="<?php echo $dbUsername ?>"></td>
 					<td>MySQL brukernavnet...</td>
 				</tr>
 				<tr>
@@ -33,7 +33,7 @@
 				</tr>
 				<tr>
 					<td><label for="dbPref">Tabell prefix</label></td>
-					<td><input type="text" id="dbPref" name="dbPref" value="b_"></td>
+					<td><input type="text" id="dbPref" name="dbPref" value="<?php echo $prefix ?>"></td>
 					<td>For å kjøre flere bildeGalleri i samme database (hvis ikke er default ok)</td>
 				</tr>
 			</table>
@@ -47,27 +47,27 @@
 			<table>
 				<tr>
 					<td><label for="mailFromName">Fra navn</label></td>
-					<td><input type="text" id="mailFromName" name="mailFromName" value="no-reply bildeGalleri"></td>
+					<td><input type="text" id="mailFromName" name="mailFromName" value="<?php echo $fromName ?>"></td>
 					<td>Navnet som skal vises i 'fra'-feltet hos mottaker</td>
 				</tr>
 				<tr>
 					<td><label for="mailFromMail">Fra e-post</label></td>
-					<td><input type="text" id="mailFromMail" name="mailFromMail"></td>
+					<td><input type="text" id="mailFromMail" name="mailFromMail" value="<?php echo $fromMail ?>"></td>
 					<td>E-postadressen bildeGalleri skal sende fra</td>
 				</tr>
 				<tr>
 					<td><label for="mailHost">Host</label></td>
-					<td><input type="text" id="mailHost" name="mailHost"></td>
+					<td><input type="text" id="mailHost" name="mailHost" value="<?php echo $host ?>"></td>
 					<td>Hostname eller IP-adressen til e-posttjeneren (f.eks mail.example.com)</td>
 				</tr>
 				<tr>
 					<td><label for="mailPort">Portnr.</label></td>
-					<td><input type="text" id="mailPort" name="mailPort"></td>
+					<td><input type="text" id="mailPort" name="mailPort" value="<?php echo $port ?>"></td>
 					<td>Portnummmeret e-posttjeneren bruker </td>
 				</tr>
 				<tr>
 					<td><label for="mailUser">Brukernavn</label></td>
-					<td><input type="text" id="mailUser" name="mailUser"></td>
+					<td><input type="text" id="mailUser" name="mailUser" value="<?php echo $username ?>"></td>
 					<td>Brukernavnet til e-posttjeneren</td>
 				</tr>
 				<tr>

@@ -26,7 +26,7 @@
     //------------------------------------------
 
     if(isset($_POST['glemtMail'])){
-        include "../sql/db.php";
+        include "../sql/db_old.php";
 
         if($stmt = $tk -> prepare("SELECT id, fname, lname FROM ". $users ." WHERE email = ?")){
             $stmt -> bind_param('s', $_POST['glemtMail']);

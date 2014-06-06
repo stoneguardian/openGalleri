@@ -195,71 +195,86 @@ function npRouter(){
 
 //- Login ---------------------------------------------------//
 
+function ajaxPostCall(values, url, done){
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: values,
+        success: function (data){
+            //return data;
+            done(data);
+        },
+        error: function (){
+            done(false);
+        }
+    });
+}
+
 function checkLogin() {
     slideRouter('checkLogin');
 
+    //Get values
     var una = document.getElementById('bnavn').value;
     var pas = document.getElementById('pwd').value;
     var rem = document.getElementById('husk').checked;
-    setTimeout( function (){
-        $.ajax({
-            type: "POST",
-            url: "login/login.php",
-            data: { 'brukernavn': una, 'passord': pas, 'husk': rem },
-            headers: { "X_Ajax": "TRUE" },
-            datatype: "json",
-            success: function (data) {
-                //alert(data.login);
-                if (data.login == 'true') {
-                    window.location = "user/";
-                } else if (data.login == 'false') {
-                    //window.location = "ZZZ_test.php?error=" + data.login;
-                    $('.login').addClass('error');
-                    $('#center').addClass('buzz');
-                    slideRouter('login');
-                    setTimeout(function () { $('#center').removeClass('buzz') }, 700);
-                } else {
-                    alert('feil!');
-                    slideRouter('login');
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.status);
-                slideRouter('login');
-            }
-        }, 5000);
-    }, 300);
-    setTimeout(function () { slideRouter('login') }, 10000);
+
+    //Create array
+    var sendData = { 'brukernavn': una, 'passord': pas, 'husk': rem };
+
+    //Gend request
+    ajaxPostCall(sendData, 'login/login.php', checkLoginResponse);
+
+    //Just in case
+    setTimeout(function () { slideRouter('login') }, 15000);
+}
+
+function checkLoginResponse(post){
+    if(post == false){ //if ajax unsuccessful
+        alert('Prøv igjen');
+
+    }else if(post.login == 'true'){ //if successful login
+        setTimeout(function (){ window.location = "user/"; }, 3000);
+
+    }else if(post.login == 'false'){ //if unsuccessful login
+        $('.login').addClass('error');
+        $('#center').addClass('buzz');
+        slideRouter('login');
+        setTimeout(function () { $('#center').removeClass('buzz') }, 700);
+
+    }else{ //in case of something unexpected
+        alert('ERROR!');
+        slideRouter('login');
+    }
 }
 
 function uImg(){
+    //Get value
     var una = document.getElementById('bnavn').value;
 
-    $.ajax({
-        type: 'POST',
-        url: 'user/gravatar.php',
-        data: { 'mail': una },
-        header: { "type": 'ajax' },
-        success: function (data){
-            //alert('får respons');
-            errorcount = 0;
-            $('#currentIcon').addClass('userOut');
-            $('.userOut').removeAttr('id');
-            $('#loginImg').append('<div id="currentIcon" class="userIcon userInn"></div>');
-            $('#currentIcon').css('background-image', 'url('+data.userimg+')');
-            setTimeout(function() { $('#currentIcon').removeClass('userInn') }, 50);
-            setTimeout(function() { $('.userOut').remove() }, 1000);
-        },
-        error: function () {
-            alert('auda');
-            if(errorcount < 4){
-                uImg();
-                errorcount += 1;
-            }else{
-                alert('maks ganger nådd');
-            }
+    //Make array
+    var sendData = { 'mail' : una };
+
+    //Send request
+    ajaxPostCall(sendData, 'user/gravatar.php', setUserImage)
+}
+
+function setUserImage(post){
+    if(post == false){
+        if(errorCount < 4){
+            uImg();
+            errorcount = errorcount + 1;
+        }else{
+            alert('Klarer ikke laste bilde');
         }
-    });
+    }else{
+        errorcount = 0;
+        $('#currentIcon').addClass('userOut');
+        $('.userOut').removeAttr('id');
+        $('#loginImg').append('<div id="currentIcon" class="userIcon userInn"></div>');
+        $('#currentIcon').css('background-image', 'url('+post.userimg+')');
+        setTimeout(function() { $('#currentIcon').removeClass('userInn') }, 50);
+        setTimeout(function() { $('.userOut').remove() }, 1000);
+    }
 }
 
 function loader(state) {
@@ -289,6 +304,8 @@ function slideRouter(opp) {
     $('#nyPwd').addClass('nyPwdNed');
     //$('#kode').addClass('kodeNed');
 
+    $('.textInput').removeClass('textInputDown');
+
     if (opp == 'login') {
         $('#btnLogin').removeClass('botRightHidden');
         $('#login').removeClass('loginNed');
@@ -300,6 +317,7 @@ function slideRouter(opp) {
         $('#btnTilbake').removeClass('botRightHidden');
         $('#kode').removeClass('kodeNed');
     } else if (opp == 'checkLogin') {
+        $('.textInput').addClass('textInputDown');
         $('#login').removeClass('loginNed');
         $('#login').addClass('loginCheck');
         loader('create');
