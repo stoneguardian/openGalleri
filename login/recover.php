@@ -1,7 +1,6 @@
 <?php
 
-
-    require '../sql/db.php';
+    require '../sql/db_old.php';
 
 	if(isset($_POST['code']) and isset($_POST['mail'])){
 

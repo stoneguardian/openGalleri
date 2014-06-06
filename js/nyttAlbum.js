@@ -15,9 +15,17 @@ var ctrlAlbum = "../upload/controllAlbum.php";
 var aid = 0;
 var counter = 1;
 var created = false;
-//var picDir = origDir; // + year + '-' + name;
 var name,
     year;
+
+function savedMsg(msg, id){
+    document.getElementById(id).innerHTML = msg;
+    setTimeout(function (){ document.getElementById(id).innerHTML = ''; }, 2500);
+}
+
+function test(){
+    savedMsg('Album opprettet', 'omStatus');
+}
 
 function checkBasic(){
     //Hent fra form
@@ -58,53 +66,47 @@ function checkBasic(){
 }//checkBasic end//
 
 function genAlbum(){
-
-    $.ajax({
-        type: 'POST',
-        url: ctrlAlbum,
-        data: { 'switch' : '0', 'uid' : uid },
-        datatype: 'json',
-        success: function (data){
-            if(data.albumID != false){
-                aid = data.albumID;
-                //picDir = origDir + data.alYear + '-' + data.alName;
-                name = data.alName;
-                year = data.alYear;
-                //alert(picDir);
-            }else{
-                alert('noe gikk galt');
-            }
-            if(data.error == true){
-                alert(data.errorMsg + ", " + data.switch);
-            }
-        }
-    });
+    //Prepare array
+    var values = {'switch' : '0', 'uid' : uid };
+    ajaxPostCall(values, ctrlAlbum, genAlbumReturn);
 }//genAlbum end//
 
-function changeAlbum(){
+function genAlbumReturn(post){
+    if(post == false){
+        alert('Uventet feil oppstod (genAlbum), prøv igjen');
+    }else if(post.albumID > 0){
+        aid = post.albumID;
+    }else{
+        alert("Noe gikk galt, " + post.errorMsg);
+    }
+}
+
+function changeNameYear(){
     name = document.getElementById('albumNavn').value;
     year = document.getElementById('albumYear').value;
 
+    //Prepare array
+    var values = { 'albumID' : aid, 'albumName' : name, 'albumYear' : year, 'uid' : uid, 'count' : counter, 'mail' : mail, 'switch' : '1' };
+
     if(checkBasic() == true){
-        $.ajax({
-            type: 'POST',
-            url: ctrlAlbum,
-            data: { 'albumID' : aid, 'albumName' : name, 'albumYear' : year, 'uid' : uid, 'count' : counter, 'mail' : mail, 'switch' : '1' },
-            datatype: 'json',
-            success: function (data){
-                if(data.updateAlbum == false){
-                    alert(data.errorMsg);
-                }else{
-                    if(data.error == true){
-                        alert(data.errorMsg);
-                    }else{
-                        created = true;
-                    }
-                }
-            }
-        }); //ajax end//
+        ajaxPostCall(values, ctrlAlbum, changeNameYearReturn);
     }
 }//changeAlbum end//
+
+function changeNameYearReturn(post){
+    if(post == false){
+        alert('Uventet feil oppstod (changeNameYear), prøv igjen');
+    }else if(post.updateAlbum == true){
+        if(created == false){
+            created = true;
+            savedMsg("Album " + name + " opprettet", "omStatus");
+        }else{
+            savedMsg("Navn og årstall oppdatert", "omStatus");
+        }
+
+        document.getElementById('nAlbTitle').innerHTML = name + "(" +year + ")";
+    }
+}
 
 function removeAlbum(){
     $.ajax({
@@ -150,7 +152,7 @@ function addCover(name){
     option.text = name;
     option.value = counter;
     var select = document.getElementById("coverBilde");
-    select.appendChild(option);
+    //select.appendChild(option);
 }
 
 function load(){

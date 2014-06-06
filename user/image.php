@@ -1,25 +1,29 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hallvard
- * Date: 02.05.14
- * Time: 20:22
- */
 	session_start();
 
-	include '../config/siteconfig.php';
+	include '../config/siteConf.php';
 
+
+	//echo "HEI";
 	//Get variables
 	$path = $_GET['path'];
 	$challenge = $_GET['key'];
 	$truth = $_SESSION['key'];
 
-	//header('Content-type: image/png');
-	header('Content-type: image/png');
 	if($challenge === $truth and $challenge != '' and $path != ''){
-		$truePath = $albumPath . $path;
-		readfile($truePath);
+		$truePath = $path;
+
+		if(file_exists($truePath)){
+			$type = pathinfo($truePath); //Set header
+			if($type['extension'] == 'jpg'){
+				header('Content-type: image/jpeg');
+			}elseif($type['extension'] == 'png'){
+				header('Content-type: image/png');
+			}
+			readfile($truePath);
+		}
 	}else{
+		header('Content-type: image/png');
 		readfile('../bilder/noAccess.png');
 		//echo $challenge . '<br>';
 		//echo $truth;

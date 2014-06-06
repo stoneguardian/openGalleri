@@ -7,24 +7,22 @@
 	//-------------------------------------//
 
 	//Includes ----------------------------//
-	include '../sql/db.php';
-	//include 'gravatar.php';
-	include 'userFunctions.php';
-	//include 'albumFunctions.php';
-	include_once "../config/dbname.php";
+	include '../class/dbClass.php';
+	include '../class/userClass.php';
 	//-------------------------------------//
 
 	$mail = $_SESSION['username'];
+	$db = new db();
 
 	//Create user and get information
-	$user = new user();
-	$user -> addUserByMail($mail);
+	$user = new user($db);
+	$user -> addByMail($mail);
 
 	$uid = $user -> getUid();
 	$name = $user -> getName();
 
 	//Get gravatar-url
-	$url = genGravatarURL($mail);
+	//$url = genGravatarURL($mail);
 
     //$formAction = "ZZZ_test.php?albumRouter=y&uid=" . $uid;
 
@@ -52,7 +50,7 @@
 			<h1 id="nAlbTitle">Nytt Album</h1>
 
 			<div class="naStep" id="naAbout">
-				<a href="#0" onclick="naAbout(false);" class="naStepTitle" id="naAboutTitle"><!--<i class="fa fa-minus"></i>--> + Om Album</a>
+				<a href="#0" onclick="naAbout(false);" class="naStepTitle" id="naAboutTitle">+ Om Album <span class="hStatus" id="omStatus"></span></a>
 				<div class="naContent">
 					<div id="naAlbNameContainer">
 						<input type="text" name="albumNavn" id="albumNavn" class="naAlbumName" maxlength="30" placeholder="Albumnavn" required onfocus="removeError('nameError');" onkeyup="naCheckLenght();">
@@ -66,14 +64,13 @@
 					</div>
 
 
-					<button class="btn-wanted" type="button" onclick="changeAlbum();">Lagre</button>
+					<button class="btn-wanted" type="button" onclick="changeNameYear();">Lagre</button>
 					<span id="basicError"></span>
-					<a href="#0" class="naBtn" onclick="naAboutEnd();">Test</a><br><br>
 				</div>
 			</div>
 
 			<div class="naStep">
-				<span class="naStepTitle"><i class="fa fa-minus"></i> Bilder</span>
+				<span class="naStepTitle">- Bilder<span class="hStatus" id="picStatus"></span></span>
 				<form id="upload" action="../upload/save.php" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="MAX_FILE_SIZE" id="MAX_FILE_SIZE" value="10000000">
 					<a href="#0" onclick="$('#sti').click();"><div id="filedrag">Slipp bilder her, eller trykk for å laste opp...</div></a>
@@ -103,7 +100,7 @@
 			</div>
 
 			<div class="naStep">
-				<span class="naStepTitle"><i class="fa fa-minus"></i> Rettigheter</span>
+				<span class="naStepTitle">- Rettigheter<span class="hStatus" id="rightStatus"></span></span>
 			</div>
 
 				<!--<div id="side2">
@@ -162,5 +159,7 @@
 
         <script src='../js/filedrag.js'></script>
 		<script src="../js/nyttAlbum.js"></script>
+		<script src="../js/globalFunctions.js"></script>
+		<script>genAlbum();</script>
     </body>
 </html>

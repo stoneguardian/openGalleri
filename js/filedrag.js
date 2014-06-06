@@ -76,9 +76,7 @@ Based on (with a few modifications):
 
             fileReader.readAsDataURL(file);
 
-
-
-            addCover(file.name);
+            //addCover(file.name);
 
             return true;
         }else if(type == false){
@@ -95,17 +93,19 @@ Based on (with a few modifications):
 	function UploadFile(file, nr) {
 
 		var xhr = new XMLHttpRequest();
-		//if (xhr.upload && types(file.type) == true && file.size <= $id("MAX_FILE_SIZE").value) {
-            var path = "../upload/save.php?ajax=on&aid="+aid+"&nr="+nr+"&year="+year+"&name="+name+"&mail="+mail+"&type="+file.type;
+        var path = "../upload/save.php?";
 
-			// start upload
-			xhr.open("POST", path, true);
-            xhr.setRequestHeader("X_file_type", file.type);
-			xhr.send(file);
+        //Create FormData to send to server
+        var formData = new FormData();
+        formData.append('aid', aid);
+        formData.append('uid', uid);
+        formData.append('nr', nr);
+        formData.append('image', file);
 
-		/*}else{
-            alert('ikke alle krav er oppfylt');
-        }*/
+		// start upload
+		xhr.open("POST", path, true);
+		xhr.send(formData);
+
 	}
 
 

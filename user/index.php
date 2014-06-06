@@ -7,24 +7,26 @@
 	//-------------------------------------//
 
 	//Includes ----------------------------//
-	include '../sql/db.php';
-	include 'userFunctions.php';
-	//include 'albumFunctions.php';
-	include_once "../config/dbname.php";
+	include '../class/dbClass.php';
+	include '../class/userClass.php';
+	include '../class/albumClass.php';
 	//-------------------------------------//
 
     $mail = $_SESSION['username'];
+	$key = $_SESSION['key'];
 
 	//Create user and get information
-	$user = new user();
-	$user -> addUserByMail($mail);
+	$db = new db();
+	$user = new user($db);
+	$user -> addByMail($mail);
 
 	$uid = $user -> getUid();
-	$name = $user -> getName();
 
 	//Check how many albums the user have
 	//$decide = albumCount($uid);
-
+	$query = "SELECT albumId FROM ".$tblName['acce']." WHERE type = 'user' AND otherId = :uid";
+	$parameter = array('uid' => $uid);
+	$decide = $db -> getNumRows($query, $parameter);
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +43,26 @@
             <h1>Mine album</h1>
             <?php
 				if($decide > 0){
+					$result = $db -> ask($query, $parameter);
+					foreach($result as $row){
+						$value = array('id' => $row['albumId']);
+						$album = new album($value, $user, $db);
+						$tmpPath = $album -> getCoverPath();
+						$absolutePath = "image.php?path=".$tmpPath."&key=".$key;
+						$aName = $album -> getName();
+						$aYear = $album -> getYear();
+						$aId = $album -> getId();
+
+						//echo $tmpPath;
+
+						echo '
+                                  <div class="album-box" style="background:url(' . "'$absolutePath'" . '); background-repeat: no-repeat; background-position: center center; background-size: cover;">
+                                  <div class="box-pad"></div>
+                                  <a href="album.php?id='.$aId.'" class="box-title" style="font-size: ' . $fontSize . 'px;">' . $aName . '</a>
+                                  <a class="box-year">' . $aYear . '</a>
+                                  </div>';
+					}
+
 				    /*if($stmt = $tk -> prepare("SELECT a.name, a.year, p.path FROM ". $album ." a LEFT JOIN ". $users ." u ON u.id = a.uid LEFT JOIN ". $pictures ." p ON a.id = p.aid WHERE u.id = ? AND a.cover = p.imageNum")){
                         $stmt -> bind_param("s", $uid);
                         $stmt -> execute();
@@ -65,9 +87,9 @@
                         }
                         $stmt -> close();
                     }*/
-					$album = new album(1, 'Italia', 2013);
+					/*$album = new album(1, 'Italia', 2013);
 					$album -> getName();
-					echo "123";
+					echo "123";*/
                 }else{
                     echo "her var det tomt gitt";
                 }
